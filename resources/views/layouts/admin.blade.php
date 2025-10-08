@@ -1,56 +1,36 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="UTF-8">
-    <title>Panel Admin</title>
-    @vite('resources/css/app.css')
-    @vite('resources/js/app.js')
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ config('app.name', 'Laravel') }}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://kit.fontawesome.com/c3672ea99d.js" crossorigin="anonymous"></script>
+
+    <!-- Styles -->
+    @livewireStyles
 </head>
-<body class="bg-gray-100">
+<body class="font-sans antialiased bg-gray-50">
+    @include('layouts.includes.admin.navigation')
+    @include('layouts.includes.admin.sidebar')
 
-<!-- Sidebar -->
-<aside class="fixed top-0 left-0 w-64 h-screen bg-white border-r border-gray-200">
-    <div class="flex items-center justify-center h-16 border-b">
-        <img src="{{ asset('img/logo.png') }}" alt="Logo" class="h-8">
+<div class="p-4 sm:ml-64">
+    <div class = "mt-14">
+        {{$slot}}
     </div>
-    <div class="p-4">
-        <ul class="space-y-2">
-            <li><a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">Dashboard</a></li>
-            <li><a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">Perfil</a></li>
-        </ul>
-    </div>
-</aside>
-
-<!-- Main content -->
-<div class="ml-64">
-    <!-- Top navbar -->
-    <nav class="flex justify-end items-center p-4 bg-white border-b">
-        <button id="userMenuButton" data-dropdown-toggle="userDropdown" class="flex items-center space-x-2">
-            <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="User">
-        </button>
-
-        <!-- Dropdown -->
-        <div id="userDropdown" class="hidden z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
-            <div class="px-4 py-3 text-sm text-gray-900">
-                <div>John Doe</div>
-                <div class="font-medium truncate">name@company.com</div>
-            </div>
-            <ul class="py-2 text-sm text-gray-700" aria-labelledby="userMenuButton">
-                <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">Perfil</a></li>
-                <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">Configuración</a></li>
-            </ul>
-            <div class="py-2">
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Salir</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Slot dinámico -->
-    <main class="p-6">
-        {{ $slot }}
-    </main>
 </div>
 
-<script src="../node_modules/flowbite/dist/flowbite.min.js"></script>
+    @stack('modals')
+
+    @livewireScripts
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 </body>
 </html>

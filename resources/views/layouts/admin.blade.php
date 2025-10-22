@@ -1,5 +1,6 @@
-@props(['breadcrumbs' => []])
-
+@props ([
+    'title' => config('app.name', 'Laravel'),
+    'breadcrumb' => []])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -7,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ $title }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -17,6 +18,9 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://kit.fontawesome.com/c3672ea99d.js" crossorigin="anonymous"></script>
 
+    <!-- WireUI -->
+    <wireui:scripts />
+
     <!-- Styles -->
     @livewireStyles
 </head>
@@ -25,15 +29,16 @@
     @include('layouts.includes.admin.sidebar')
 
 <div class="p-4 sm:ml-64">
+    {{--Añadiendo margen superior--}}
     <div class = "mt-14 flex items-center justify-between w-full">
-        @include('layouts.includes.admin.breadcrum')
+        @if (count($breadcrumb))
+            @include('layouts.includes.admin.breadcrumb', ['title' => $title, 'breadcrumb' => $breadcrumb])
+        @endif
     </div>
-        {{$slot}}
+    {{$slot}}
 </div>
 
     @stack('modals')
-    <wireui:scripts />
-    <script src="//unpkg.com/alpinejs" defer></script>
 
     @livewireScripts
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>

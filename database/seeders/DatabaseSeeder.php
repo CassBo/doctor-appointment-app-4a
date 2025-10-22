@@ -13,11 +13,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        //Llamar al RoleSeeder creado
+        $this->call([
+            RoleSeeder::class,
         ]);
+        //Crea un usuario de prueba cada que ejecuto migrations
+        User::factory()->create([ // O puedes usar User::create() si no necesitas los valores por defecto de la factory
+            'name' => 'Cassiel Botello',
+            'email' => 'cassiel@tecsoftware.com',
+            'password' => bcrypt('cassiel'),
+        ])->assignRole('Administrador'); // Asigna el rol 'Administrador'
+
     }
 }

@@ -10,5 +10,7 @@
         'active' => request()->routeIs('profile.show'),
     ],
 ]">
- Hola desde admin
+    Hola desde admin
 </x-admin-layout>
+
+

@@ -34,6 +34,10 @@
         @if (count($breadcrumb))
             @include('layouts.includes.admin.breadcrumb', ['title' => $title, 'breadcrumb' => $breadcrumb])
         @endif
+
+        @if (isset($action))
+            {{ $action }}
+        @endif
     </div>
     {{$slot}}
 </div>

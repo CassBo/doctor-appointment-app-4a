@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
@@ -20,7 +20,19 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:roles,name'
+        ]);
+
+        $role = Role::create(['name' => $request->name]);
+
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => 'Rol creado correctamente',
+            'text' => 'El rol ha sido creado exitosamente.'
+        ]);
+
+        return redirect()->route('admin.roles.index');
     }
 
     public function show(Role $role)
@@ -35,12 +47,31 @@ class RoleController extends Controller
 
     public function update(Request $request, Role $role)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:roles,name,' . $role->id
+        ]);
+
+        $role->update(['name' => $request->name]);
+
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => 'Rol actualizado',
+            'text' => 'El rol ha sido actualizado exitosamente.'
+        ]);
+
+        return redirect()->route('admin.roles.index');
     }
 
     public function destroy(Role $role)
     {
         $role->delete();
-        return redirect()->route('admin.roles.index')->with('success', 'Rol eliminado correctamente.');
+
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => 'Rol eliminado',
+            'text' => 'El rol ha sido eliminado exitosamente.'
+        ]);
+
+        return redirect()->route('admin.roles.index');
     }
 }

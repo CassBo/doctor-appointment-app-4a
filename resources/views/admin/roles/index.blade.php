@@ -19,21 +19,43 @@
 
     @push('js')
         <script>
-            function deleteRole(roleId) {
-                Swal.fire({
-                    title: '¿Estás seguro?',
-                    text: "¡No podrás revertir esto!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Sí, ¡eliminar!',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById('delete-form-' + roleId).submit();
-                    }
-                })
+            const protectedRoles = [1, 2, 3, 4];
+
+            function handleEdit(roleId, url) {
+                if (protectedRoles.includes(roleId)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Acción no permitida',
+                        text: 'No puedes editar este rol porque es un rol protegido.'
+                    });
+                } else {
+                    window.location.href = url;
+                }
+            }
+
+            function handleDelete(roleId) {
+                if (protectedRoles.includes(roleId)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Acción no permitida',
+                        text: 'No puedes eliminar este rol porque es un rol protegido.'
+                    });
+                } else {
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: "¡No podrás revertir esto!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, ¡eliminar!',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('delete-form-' + roleId).submit();
+                        }
+                    })
+                }
             }
 
             @if (session()->has('swal'))

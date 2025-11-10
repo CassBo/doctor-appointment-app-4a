@@ -42,11 +42,28 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
+        if (in_array($role->id, [1, 2, 3, 4])) {
+            session()->flash('swal', [
+                'icon' => 'error',
+                'title' => 'Acción no permitida',
+                'text' => 'No puedes editar este rol porque es un rol protegido.'
+            ]);
+            return redirect()->route('admin.roles.index');
+        }
         return view('admin.roles.edit', compact('role'));
     }
 
     public function update(Request $request, Role $role)
     {
+        if (in_array($role->id, [1, 2, 3, 4])) {
+            session()->flash('swal', [
+                'icon' => 'error',
+                'title' => 'Error',
+                'text' => 'No puedes editar este rol.'
+            ]);
+            return redirect()->route('admin.roles.index');
+        }
+
         $request->validate([
             'name' => 'required|unique:roles,name,' . $role->id
         ]);
@@ -64,6 +81,15 @@ class RoleController extends Controller
 
     public function destroy(Role $role)
     {
+        if (in_array($role->id, [1, 2, 3, 4])) {
+            session()->flash('swal', [
+                'icon' => 'error',
+                'title' => 'Error',
+                'text' => 'No puedes eliminar este rol.'
+            ]);
+            return redirect()->route('admin.roles.index');
+        }
+
         $role->delete();
 
         session()->flash('swal', [

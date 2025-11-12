@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 
 Route::redirect('/', '/admin');
 
@@ -10,7 +11,6 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    // Ruta del perfil CON LIVEWIRE
     Route::get('/user/profile', [\Laravel\Jetstream\Http\Controllers\Livewire\UserProfileController::class, 'show'])
         ->name('profile.show');
 
@@ -18,6 +18,7 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-    // Rutas para Roles
     Route::resource('admin/roles', RoleController::class)->names('admin.roles');
+
+    Route::resource('admin/users', UserController::class)->names('admin.users');
 });

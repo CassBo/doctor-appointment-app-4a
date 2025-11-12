@@ -1,5 +1,4 @@
 @php
-    // Arreglo de íconos
     $links = [
         [
             'name' => 'Dashboard',
@@ -9,6 +8,12 @@
         ],
         [
             'header' => 'Gestión',
+        ],
+        [
+            'name' => 'Usuarios',
+            'icon' => 'fa-solid fa-users',
+            'href' => route('admin.users.index'),
+            'active' => request()->routeIs('admin.users.*'),
         ],
         [
             'name' => 'Roles y permisos',

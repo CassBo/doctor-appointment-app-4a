@@ -46,7 +46,7 @@ class RoleController extends Controller
             session()->flash('swal', [
                 'icon' => 'error',
                 'title' => 'Acción no permitida',
-                'text' => 'No puedes editar este rol porque es un rol protegido.'
+                'text' => 'No puedes editar.'
             ]);
             return redirect()->route('admin.roles.index');
         }

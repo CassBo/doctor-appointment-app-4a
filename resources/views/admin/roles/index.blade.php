@@ -26,7 +26,7 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'Acción no permitida',
-                        text: 'No puedes editar este rol porque es un rol protegido.'
+                        text: 'No puedes editar este rol.'
                     });
                 } else {
                     window.location.href = url;
@@ -38,7 +38,7 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'Acción no permitida',
-                        text: 'No puedes eliminar este rol porque es un rol protegido.'
+                        text: 'No puedes eliminar este rol.'
                     });
                 } else {
                     Swal.fire({

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -15,7 +16,8 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('admin.users.create');
+        $roles = Role::all();
+        return view('admin.users.create', compact('roles'));
     }
 
     public function store(Request $request)
@@ -23,19 +25,26 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'id_number' => 'nullable|string|max:255|unique:users',
+            'phone' => 'nullable|string|max:255',
             'password' => 'required|string|min:8|confirmed',
+            'roles' => 'required|array'
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'id_number' => $request->id_number,
+            'phone' => $request->phone,
             'password' => bcrypt($request->password),
         ]);
 
+        $user->roles()->sync($request->roles);
+
         session()->flash('swal', [
             'icon' => 'success',
-            'title' => 'Usuario creado correctamente',
-            'text' => 'El usuario ha sido creado exitosamente.'
+            'title' => '¡Hecho!',
+            'text' => 'Usuario creado satisfactoriamente.'
         ]);
 
         return redirect()->route('admin.users.index');
@@ -48,7 +57,8 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        $roles = Role::all();
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, User $user)
@@ -56,20 +66,26 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'id_number' => 'nullable|string|max:255|unique:users,id_number,' . $user->id,
+            'phone' => 'nullable|string|max:255',
             'password' => 'nullable|string|min:8|confirmed',
+            'roles' => 'required|array'
         ]);
 
-        $user->name = $request->name;
-        $user->email = $request->email;
+        $data = $request->only('name', 'email', 'id_number', 'phone');
+
         if ($request->filled('password')) {
-            $user->password = bcrypt($request->password);
+            $data['password'] = bcrypt($request->password);
         }
-        $user->save();
+
+        $user->update($data);
+
+        $user->roles()->sync($request->roles);
 
         session()->flash('swal', [
             'icon' => 'success',
-            'title' => 'Usuario actualizado',
-            'text' => 'El usuario ha sido actualizado exitosamente.'
+            'title' => '¡Hecho!',
+            'text' => 'Usuario actualizado satisfactoriamente.'
         ]);
 
         return redirect()->route('admin.users.index');
@@ -77,13 +93,12 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-
         $user->delete();
 
         session()->flash('swal', [
             'icon' => 'success',
-            'title' => 'Usuario eliminado',
-            'text' => 'El usuario ha sido eliminado exitosamente.'
+            'title' => '¡Hecho!',
+            'text' => 'Usuario eliminado satisfactoriamente.'
         ]);
 
         return redirect()->route('admin.users.index');

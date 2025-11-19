@@ -3,12 +3,18 @@
 namespace App\Livewire\Admin;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
 class UserTable extends DataTableComponent
 {
     protected $model = User::class;
+
+    public function builder(): Builder
+    {
+        return User::query()->with('roles');
+    }
 
     public function configure(): void
     {
@@ -30,6 +36,16 @@ class UserTable extends DataTableComponent
             Column::make("Email", "email")
                 ->sortable()
                 ->searchable(),
+            Column::make("Nro. Documento", "id_number")
+                ->sortable()
+                ->searchable(),
+            Column::make("Celular", "phone")
+                ->sortable()
+                ->searchable(),
+            Column::make('Roles', 'id')
+                ->label(
+                    fn ($row, Column $column) => $row->roles->pluck('name')->implode(', ')
+                ),
             Column::make('Acciones')
                 ->label(
                     fn ($row, Column $column) => view('admin.users.actions')->with('user', $row)

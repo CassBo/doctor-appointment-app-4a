@@ -36,13 +36,13 @@ class UserTable extends DataTableComponent
             Column::make("Email", "email")
                 ->sortable()
                 ->searchable(),
-            Column::make("Nro. Documento", "id_number")
+            Column::make("Número de ID", "id_number")
                 ->sortable()
                 ->searchable(),
-            Column::make("Celular", "phone")
+            Column::make("Teléfono", "phone")
                 ->sortable()
                 ->searchable(),
-            Column::make('Roles', 'id')
+            Column::make('Rol', 'id')
                 ->label(
                     fn ($row, Column $column) => $row->roles->pluck('name')->implode(', ')
                 ),

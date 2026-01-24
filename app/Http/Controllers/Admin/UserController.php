@@ -93,6 +93,10 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        if (auth()->id() === $user->id) {
+            abort(403, 'No puedes eliminar tu propia cuenta.');
+        }
+
         $user->delete();
 
         session()->flash('swal', [

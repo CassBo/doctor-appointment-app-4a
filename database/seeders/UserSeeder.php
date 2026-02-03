@@ -19,6 +19,8 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Paciente',
                 'password' => Hash::make('password'),
+                'id_number' => '1111111111',
+                'phone' => '1111111111',
             ]
         )->assignRole('Paciente');
 
@@ -27,6 +29,8 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Doctor',
                 'password' => Hash::make('password'),
+                'id_number' => '2222222222',
+                'phone' => '2222222222',
             ]
         )->assignRole('Doctor');
 
@@ -35,6 +39,8 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Recepcionista',
                 'password' => Hash::make('password'),
+                'id_number' => '3333333333',
+                'phone' => '3333333333',
             ]
         )->assignRole('Recepcionista');
 
@@ -43,6 +49,8 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Administrador',
                 'password' => Hash::make('password'),
+                'id_number' => '4444444444',
+                'phone' => '4444444444',
             ]
         )->assignRole('Administrador');
 

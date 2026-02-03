@@ -18,14 +18,18 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             UserSeeder::class,
+            BloodTypeSeeder::class,
+            PatientSeeder::class,
         ]);
         //Crea un usuario de prueba cada que ejecuto migrations
-        User::factory()->create([ // O puedes usar User::create() si no necesitas los valores por defecto de la factory
-            'name' => 'Cassiel Botello',
+        User::firstOrCreate([
             'email' => 'cassiel@tecsoftware.com',
+        ], [
+            'name' => 'Cassiel Botello',
             'password' => bcrypt('cassiel'),
+            'id_number' => '5555555555',
+            'phone' => '5555555555',
         ])->assignRole('Administrador'); // Asigna el rol 'Administrador'
 
     }
 }
-

@@ -11,6 +11,9 @@
     ],
 ]">
     Hola desde admin
+
+    <div class="mt-4">
+        <x-button label="Test de WireUI" primary />
+    </div>
+
 </x-admin-layout>
-
-

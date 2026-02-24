@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             BloodTypeSeeder::class,
+            SpecialtySeeder::class,
             PatientSeeder::class,
         ]);
         //Crea un usuario de prueba cada que ejecuto migrations

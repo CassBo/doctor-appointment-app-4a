@@ -22,6 +22,12 @@
             'active' => request()->routeIs('admin.patients.*'),
         ],
         [
+            'name' => 'Doctores',
+            'icon' => 'fa-solid fa-user-doctor',
+            'href' => route('doctors.index'),
+            'active' => request()->routeIs('doctors.*'),
+        ],
+        [
             'name' => 'Roles y permisos',
             'icon' => 'fa-solid fa-shield-halved',
             'href' => route('admin.roles.index'),

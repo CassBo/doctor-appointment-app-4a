@@ -28,8 +28,8 @@
 
         {{-- Action Buttons --}}
         <div class="flex gap-3">
-            <x-button href="{{ route('doctors.index') }}" label="Volver" flat />
-            <x-button type="submit" form="edit-doctor-form" primary label="Guardar cambios" icon="save" />
+            <x-button href="{{ route('doctors.index') }}" label="Volver" class="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md font-semibold text-xs uppercase" />
+            <x-button type="submit" form="edit-doctor-form" label="Guardar cambios" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md font-semibold text-xs uppercase" />
         </div>
     </div>
 

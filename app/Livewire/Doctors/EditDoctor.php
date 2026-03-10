@@ -7,9 +7,12 @@ use App\Models\Specialty;
 use App\Models\User;
 use Livewire\Component;
 use Illuminate\View\View;
+use WireUi\Traits\Actions;
 
 class EditDoctor extends Component
 {
+    use Actions;
+
     public User $user;
     public Doctor $doctor;
 
@@ -19,6 +22,12 @@ class EditDoctor extends Component
     public $specialty_id;
     public $medical_license_number;
     public $biography;
+
+    protected $rules = [
+        'specialty_id' => 'required|exists:specialties,id',
+        'medical_license_number' => 'nullable|string|max:255',
+        'biography' => 'nullable|string',
+    ];
 
     public function mount(User $user)
     {
@@ -46,23 +55,25 @@ class EditDoctor extends Component
 
     public function save()
     {
-        $this->validate([
-            'specialty_id' => 'required|exists:specialties,id',
-            'medical_license_number' => 'nullable|string|max:255',
-            'biography' => 'nullable|string',
-        ]);
+        $validatedData = $this->validate();
 
         $this->user->doctor()->updateOrCreate(
             ['user_id' => $this->user->id],
-            [
-                'specialty_id' => $this->specialty_id,
-                'medical_license_number' => $this->medical_license_number,
-                'biography' => $this->biography,
-            ]
+            $validatedData
         );
 
-        session()->flash('message', 'Información del doctor guardada exitosamente.');
+        $this->notification()->success(
+            'Información Actualizada',
+            'Los datos del doctor han sido guardados correctamente.'
+        );
+    }
 
-        return redirect()->route('doctors.index');
+    protected function validationAttributes(): array
+    {
+        return [
+            'specialty_id' => 'especialidad',
+            'medical_license_number' => 'cédula profesional',
+            'biography' => 'biografía',
+        ];
     }
 }

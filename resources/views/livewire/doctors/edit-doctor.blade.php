@@ -24,6 +24,7 @@
                         option-value="id"
                         wire:model="specialty_id"
                     />
+                    <x-input-error for="specialty_id" class="mt-2" />
                 </div>
                 <div>
                     <x-input
@@ -31,6 +32,7 @@
                         placeholder="Ej. 12345678"
                         wire:model="medical_license_number"
                     />
+                    <x-input-error for="medical_license_number" class="mt-2" />
                 </div>
                 <div class="md:col-span-2">
                     <x-textarea
@@ -38,12 +40,13 @@
                         placeholder="Describa la trayectoria y enfoque del doctor."
                         wire:model="biography"
                     />
+                    <x-input-error for="biography" class="mt-2" />
                 </div>
             </div>
 
             <x-slot name="footer">
                 <div class="flex justify-end items-center gap-x-4">
-                    <x-button type="submit" label="Guardar Cambios" primary />
+                    <x-button type="submit" spinner="save" loading-delay="short" class="btn btn-primary" label="Guardar Cambios" />
                 </div>
             </x-slot>
         </x-card>

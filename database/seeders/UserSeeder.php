@@ -57,5 +57,10 @@ class UserSeeder extends Seeder
         User::factory(10)->create()->each(function ($user) {
             $user->assignRole('Paciente');
         });
+
+        // Create 5 additional dummy doctors
+        User::factory(5)->create()->each(function ($user) {
+            $user->assignRole('Doctor');
+        });
     }
 }

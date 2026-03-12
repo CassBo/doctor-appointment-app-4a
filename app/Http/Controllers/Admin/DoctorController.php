@@ -60,8 +60,15 @@ class DoctorController extends Controller
      */
     public function schedules(User $doctor)
     {
-        // Ensure the doctor relationship exists, if not, create it.
-        $doctor->doctor()->firstOrCreate([]);
+        $doctor->load('doctor');
+
+        // A doctor user must have a doctor profile to manage schedules.
+        // If not, redirect to the edit page to create it.
+        if (!$doctor->doctor) {
+            session()->flash('flash.banner', 'Por favor, complete el perfil del doctor antes de gestionar sus horarios.');
+            session()->flash('flash.bannerStyle', 'danger');
+            return redirect()->route('admin.doctors.edit', $doctor);
+        }
 
         // Load the schedules for the doctor profile
         $doctor->load('doctor.schedules');
@@ -72,16 +79,23 @@ class DoctorController extends Controller
     /**
      * Store the doctor's schedules.
      */
-    public function storeSchedules(Request $request, User $user)
+    public function storeSchedules(Request $request, User $doctor)
     {
         $request->validate([
             'schedules' => 'required|array',
-            'schedules.*.start_time' => 'nullable|date_format:H:i',
-            'schedules.*.end_time' => 'nullable|date_format:H:i|after:schedules.*.start_time',
+            'schedules.*.start_time' => 'nullable|date_format:H:i,H:i:s',
+            'schedules.*.end_time' => 'nullable|date_format:H:i,H:i:s|after:schedules.*.start_time',
         ]);
 
-        // Ensure the doctor relationship exists, if not, create it.
-        $doctor = $user->doctor()->firstOrCreate([]);
+        $doctorProfile = $doctor->doctor;
+
+        // Safeguard: A doctor profile must exist. If not, redirect to the edit page.
+        if (!$doctorProfile) {
+            session()->flash('flash.banner', 'No se pudo encontrar el perfil del doctor. Por favor, complételo primero.');
+            session()->flash('flash.bannerStyle', 'danger');
+            return redirect()->route('admin.doctors.edit', $doctor);
+        }
+
         $days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
         $schedules = $request->input('schedules', []);
 
@@ -91,7 +105,7 @@ class DoctorController extends Controller
             // If start and end times are provided, create or update the schedule
             if (!empty($scheduleData['start_time']) && !empty($scheduleData['end_time'])) {
                 $status = isset($scheduleData['status']) ? 'active' : 'inactive';
-                $doctor->schedules()->updateOrCreate(
+                $doctorProfile->schedules()->updateOrCreate(
                     ['day_of_week' => $day],
                     [
                         'start_time' => $scheduleData['start_time'],
@@ -101,13 +115,13 @@ class DoctorController extends Controller
                 );
             } else {
                 // If times are empty for a specific day, delete the schedule for that day
-                $doctor->schedules()->where('day_of_week', $day)->delete();
+                $doctorProfile->schedules()->where('day_of_week', $day)->delete();
             }
         }
 
         session()->flash('flash.banner', '¡Los horarios del doctor han sido actualizados exitosamente!');
         session()->flash('flash.bannerStyle', 'success');
 
-        return redirect()->route('admin.doctors.edit', $user);
+        return redirect()->route('admin.doctors.index');
     }
 }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('specialty_id')->constrained('specialties')->onDelete('cascade');
             $table->date('date');
             $table->time('time');
+            $table->text('reason')->nullable();
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
             $table->timestamps();
         });

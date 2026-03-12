@@ -25,4 +25,9 @@ class Cita extends Model
     {
         return $this->belongsTo(Specialty::class);
     }
+
+    public function consultation()
+    {
+        return $this->hasOne(Consultation::class);
+    }
 }

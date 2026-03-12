@@ -29,6 +29,10 @@ Route::middleware([
     Route::post('admin/doctors/{doctor}/schedules', [DoctorController::class, 'storeSchedules'])->name('admin.doctors.schedules.store');
 
     Route::resource('admin/citas', CitaController::class)->names('admin.citas');
+    Route::get('admin/citas/{cita}/consultation/create', [CitaController::class, 'createConsultation'])->name('admin.citas.consultation.create');
+    Route::post('admin/citas/{cita}/consultation', [CitaController::class, 'storeConsultation'])->name('admin.citas.consultation.store');
+    Route::get('admin/citas/{cita}/consultation', [CitaController::class, 'showConsultation'])->name('admin.citas.consultation.show');
+
 
     // Rutas para citas médicas y calendario
     Route::get('admin/appointments', function () {

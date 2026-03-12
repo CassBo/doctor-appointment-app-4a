@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             SpecialtySeeder::class,
             DoctorSeeder::class,
             PatientSeeder::class,
+            CitaSeeder::class,
         ]);
         //Crea un usuario de prueba cada que ejecuto migrations
         User::firstOrCreate([

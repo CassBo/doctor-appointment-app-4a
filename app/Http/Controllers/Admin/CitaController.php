@@ -11,28 +11,16 @@ use Illuminate\Http\Request;
 
 class CitaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return view('admin.citas.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        $patients = Patient::all();
-        $doctors = Doctor::all();
-        $specialties = Specialty::all();
-        return view('admin.citas.create', compact('patients', 'doctors', 'specialties'));
+        return view('admin.citas.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -48,35 +36,60 @@ class CitaController extends Controller
         return redirect()->route('admin.citas.index')->with('success', 'Cita creada exitosamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Cita $cita)
     {
-        //
+        return view('admin.citas.show', compact('cita'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Cita $cita)
     {
-        //
+        $patients = Patient::all();
+        $doctors = Doctor::all();
+        $specialties = Specialty::all();
+        return view('admin.citas.edit', compact('cita', 'patients', 'doctors', 'specialties'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Cita $cita)
     {
-        //
+        $request->validate([
+            'patient_id' => 'required|exists:patients,id',
+            'doctor_id' => 'required|exists:doctors,id',
+            'specialty_id' => 'required|exists:specialties,id',
+            'date' => 'required|date',
+            'time' => 'required',
+        ]);
+
+        $cita->update($request->all());
+
+        return redirect()->route('admin.citas.index')->with('success', 'Cita actualizada exitosamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Cita $cita)
     {
-        //
+        $cita->delete();
+        return redirect()->route('admin.citas.index')->with('success', 'Cita eliminada exitosamente.');
+    }
+
+    public function createConsultation(Cita $cita)
+    {
+        return view('admin.citas.consultation-create', compact('cita'));
+    }
+
+    public function storeConsultation(Request $request, Cita $cita)
+    {
+        $request->validate([
+            'diagnosis' => 'required',
+            'treatment' => 'required',
+        ]);
+
+        $cita->consultation()->create($request->all());
+
+        return redirect()->route('admin.citas.index')->with('success', 'Datos de la consulta guardados exitosamente.');
+    }
+
+    public function showConsultation(Cita $cita)
+    {
+        $consultation = $cita->consultation;
+        return view('admin.citas.consultation-show', compact('consultation'));
     }
 }

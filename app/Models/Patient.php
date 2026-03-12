@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Patient extends Model
 {
@@ -30,5 +31,12 @@ class Patient extends Model
     public function bloodType()
     {
         return $this->belongsTo(BloodType::class);
+    }
+
+    protected function fullName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->user->name,
+        );
     }
 }

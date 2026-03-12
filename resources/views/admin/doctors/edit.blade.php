@@ -29,6 +29,7 @@
         {{-- Action Buttons --}}
         <div class="flex gap-3">
             <x-button href="{{ route('admin.doctors.index') }}" label="Volver" class="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md font-semibold text-xs uppercase" />
+            <x-button href="{{ route('admin.doctors.schedules', $user) }}" label="Horarios" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md font-semibold text-xs uppercase" />
             <x-button type="submit" form="edit-doctor-form" label="Guardar cambios" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md font-semibold text-xs uppercase" />
         </div>
     </div>

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PatientController;
 use App\Http\Controllers\Admin\DoctorController;
+use App\Http\Controllers\Admin\CitaController;
 
 Route::redirect('/', '/admin');
 
@@ -24,6 +25,10 @@ Route::middleware([
     Route::resource('admin/users', UserController::class)->names('admin.users');
     Route::resource('admin/patients', PatientController::class)->names('admin.patients');
     Route::resource('admin/doctors', DoctorController::class)->names('admin.doctors');
+    Route::get('admin/doctors/{doctor}/schedules', [DoctorController::class, 'schedules'])->name('admin.doctors.schedules');
+    Route::post('admin/doctors/{doctor}/schedules', [DoctorController::class, 'storeSchedules'])->name('admin.doctors.schedules.store');
+
+    Route::resource('admin/citas', CitaController::class)->names('admin.citas');
 
     // Rutas para citas médicas y calendario
     Route::get('admin/appointments', function () {

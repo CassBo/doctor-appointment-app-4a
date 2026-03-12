@@ -12,7 +12,7 @@
             </div>
         @endsession
 
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('login') }}" id="login-form">
             @csrf
 
             <div>
@@ -39,10 +39,24 @@
                     </a>
                 @endif
 
-                <x-jetstream::button class="ms-4">
+                <x-button class="ms-4" id="login-button">
                     {{ __('Log in') }}
-                </x-jetstream::button>
+                </x-button>
             </div>
         </form>
     </x-authentication-card>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('login-form');
+            const button = document.getElementById('login-button');
+
+            if (button && form) {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    form.submit();
+                });
+            }
+        });
+    </script>
 </x-guest-layout>

@@ -30,8 +30,8 @@
         [
             'name' => 'Citas médicas',
             'icon' => 'fa-solid fa-calendar-check',
-            'href' => route('admin.appointments.index'),
-            'active' => request()->routeIs('admin.appointments.*'),
+            'href' => route('admin.citas.index'),
+            'active' => request()->routeIs('admin.citas.*'),
         ],
         [
             'name' => 'Calendario',

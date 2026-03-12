@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Doctor;
+use App\Models\Schedule;
 use App\Models\Specialty;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class DoctorController extends Controller
 {
@@ -50,5 +53,61 @@ class DoctorController extends Controller
         session()->flash('flash.bannerStyle', 'success');
 
         return redirect()->route('admin.doctors.index');
+    }
+
+    /**
+     * Show the form for managing the doctor's schedules.
+     */
+    public function schedules(User $doctor)
+    {
+        // Ensure the doctor relationship exists, if not, create it.
+        $doctor->doctor()->firstOrCreate([]);
+
+        // Load the schedules for the doctor profile
+        $doctor->load('doctor.schedules');
+
+        return view('admin.doctors.schedules', compact('doctor'));
+    }
+
+    /**
+     * Store the doctor's schedules.
+     */
+    public function storeSchedules(Request $request, User $user)
+    {
+        $request->validate([
+            'schedules' => 'required|array',
+            'schedules.*.start_time' => 'nullable|date_format:H:i',
+            'schedules.*.end_time' => 'nullable|date_format:H:i|after:schedules.*.start_time',
+        ]);
+
+        // Ensure the doctor relationship exists, if not, create it.
+        $doctor = $user->doctor()->firstOrCreate([]);
+        $days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+        $schedules = $request->input('schedules', []);
+
+        foreach ($days as $day) {
+            $scheduleData = $schedules[$day] ?? null;
+
+            // If start and end times are provided, create or update the schedule
+            if (!empty($scheduleData['start_time']) && !empty($scheduleData['end_time'])) {
+                $status = isset($scheduleData['status']) ? 'active' : 'inactive';
+                $doctor->schedules()->updateOrCreate(
+                    ['day_of_week' => $day],
+                    [
+                        'start_time' => $scheduleData['start_time'],
+                        'end_time' => $scheduleData['end_time'],
+                        'status' => $status,
+                    ]
+                );
+            } else {
+                // If times are empty for a specific day, delete the schedule for that day
+                $doctor->schedules()->where('day_of_week', $day)->delete();
+            }
+        }
+
+        session()->flash('flash.banner', '¡Los horarios del doctor han sido actualizados exitosamente!');
+        session()->flash('flash.bannerStyle', 'success');
+
+        return redirect()->route('admin.doctors.edit', $user);
     }
 }

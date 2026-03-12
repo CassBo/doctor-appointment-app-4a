@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PatientController;
-use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\Admin\DoctorController;
 
 Route::redirect('/', '/admin');
 
@@ -16,15 +16,25 @@ Route::middleware([
     Route::get('/user/profile', [\Laravel\Jetstream\Http\Controllers\Livewire\UserProfileController::class, 'show'])
         ->name('profile.show');
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
 
     Route::resource('admin/roles', RoleController::class)->names('admin.roles');
     Route::resource('admin/users', UserController::class)->names('admin.users');
     Route::resource('admin/patients', PatientController::class)->names('admin.patients');
+    Route::resource('admin/doctors', DoctorController::class)->names('admin.doctors');
 
-    Route::get('doctors', [DoctorController::class, 'index'])->name('doctors.index');
-    Route::get('doctors/{doctor}/edit', [DoctorController::class, 'edit'])->name('doctors.edit');
-    Route::put('doctors/{doctor}', [DoctorController::class, 'update'])->name('doctors.update');
+    // Rutas para citas médicas y calendario
+    Route::get('admin/appointments', function () {
+        return view('admin.appointments.index');
+    })->name('admin.appointments.index');
+
+    Route::get('admin/calendar', function () {
+        return view('admin.calendar.index');
+    })->name('admin.calendar.index');
+
+    Route::get('admin/support', function () {
+        return view('admin.support.index');
+    })->name('admin.support.index');
 });

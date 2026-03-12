@@ -24,14 +24,32 @@
         [
             'name' => 'Doctores',
             'icon' => 'fa-solid fa-user-doctor',
-            'href' => route('doctors.index'),
-            'active' => request()->routeIs('doctors.*'),
+            'href' => route('admin.doctors.index'),
+            'active' => request()->routeIs('admin.doctors.*'),
+        ],
+        [
+            'name' => 'Citas médicas',
+            'icon' => 'fa-solid fa-calendar-check',
+            'href' => route('admin.appointments.index'),
+            'active' => request()->routeIs('admin.appointments.*'),
+        ],
+        [
+            'name' => 'Calendario',
+            'icon' => 'fa-solid fa-calendar-days',
+            'href' => route('admin.calendar.index'),
+            'active' => request()->routeIs('admin.calendar.*'),
         ],
         [
             'name' => 'Roles y permisos',
             'icon' => 'fa-solid fa-shield-halved',
             'href' => route('admin.roles.index'),
             'active' => request()->routeIs('admin.roles.*'),
+        ],
+        [
+            'name' => 'Soporte',
+            'icon' => 'fa-solid fa-headset',
+            'href' => route('admin.support.index'),
+            'active' => request()->routeIs('admin.support.*'),
         ],
     ];
 @endphp

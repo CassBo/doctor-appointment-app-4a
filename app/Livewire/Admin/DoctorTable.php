@@ -45,7 +45,7 @@ class DoctorTable extends DataTableComponent
                 ->searchable()
                 ->format(fn($value) => $value ?? 'N/A'),
             Column::make("Acciones", "id")
-                ->format(fn($value, $row, Column $column) => view('doctors.actions', ['user' => $row]))
+                ->format(fn($value, $row, Column $column) => view('admin.doctors.actions', ['user' => $row]))
                 ->html(),
         ];
     }

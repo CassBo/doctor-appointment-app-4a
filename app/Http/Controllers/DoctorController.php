@@ -50,4 +50,6 @@ class DoctorController extends Controller
 
         return redirect()->route('doctors.index');
     }
+
+
 }

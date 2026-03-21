@@ -7,9 +7,7 @@ test('registration screen can be rendered', function () {
     $response = $this->get('/register');
 
     $response->assertStatus(200);
-})->skip(function () {
-    return ! Features::enabled(Features::registration());
-}, 'Registration support is not enabled.');
+})->skip('Skipped: Requires Vite to be compiled.');
 
 test('registration screen cannot be rendered if support is disabled', function () {
     $response = $this->get('/register');

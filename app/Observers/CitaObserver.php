@@ -4,8 +4,10 @@ namespace App\Observers;
 
 use App\Models\Cita;
 use App\Services\WhatsAppService;
+use App\Mail\CitaCreatedMail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class CitaObserver
 {
@@ -15,6 +17,7 @@ class CitaObserver
     public function created(Cita $cita): void
     {
         $this->sendConfirmation($cita);
+        $this->sendEmailConfirmation($cita);
     }
 
     /**
@@ -41,6 +44,27 @@ class CitaObserver
             }
         } catch (\Exception $e) {
             Log::error("Failed to send WhatsApp confirmation for cita {$cita->id}: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Send Email confirmation with PDF.
+     */
+    private function sendEmailConfirmation(Cita $cita)
+    {
+        try {
+            $cita->loadMissing(['patient.user', 'doctor.user', 'specialty']);
+
+            $patientEmail = $cita->patient->user->email ?? null;
+            $doctorEmail = $cita->doctor->user->email ?? null;
+
+            $emails = array_filter([$patientEmail, $doctorEmail]);
+
+            if (!empty($emails)) {
+                Mail::to($emails)->send(new CitaCreatedMail($cita));
+            }
+        } catch (\Exception $e) {
+            Log::error("Failed to send Email confirmation for cita {$cita->id}: " . $e->getMessage());
         }
     }
 }
